@@ -1,6 +1,7 @@
 import connectDB from "@/server/config/mongoConfig";
 import SignUpModel from "@/server/models/signup.model";
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,10 +20,13 @@ export async function POST(request: NextRequest) {
         { status: 409 },
       );
     }
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
     const createUser = await SignUpModel.insertOne({
       name,
       email,
-      password,
+      password: hashPassword,
     });
 
     console.log("createUser", createUser);
@@ -33,7 +37,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
-        message: "SignUp Failed!",
+        message: "Sign up Failed!",
         error: error instanceof Error ? error.message : "Unknown",
       },
       { status: 500 },
