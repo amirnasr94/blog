@@ -31,7 +31,6 @@ const SignupSchema = new Schema<ISignup>(
       required: true,
       trim: true,
       minlength: 6,
-      maxlength: 30,
     },
   },
   { collection: "users", timestamps: true },
