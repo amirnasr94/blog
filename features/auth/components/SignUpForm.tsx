@@ -10,7 +10,9 @@ import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/validation/signUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useSignUpMutation } from "../model/hooks/useSignUpMutation";
+import { signupAction } from "../actions/auth";
+import ToastMessage from "@/lib/toastMessage";
+import { redirect } from "next/navigation";
 
 export default function SignUpForm() {
   const form = useForm({
@@ -22,14 +24,24 @@ export default function SignUpForm() {
     },
   });
 
-  const { submitSignup } = useSignUpMutation();
-
-  function handleSubmit() {
-    submitSignup({
+  async function handleSubmit() {
+    const toastMessage = new ToastMessage();
+    const data = {
       name: form.getValues("name"),
       email: form.getValues("email"),
       password: form.getValues("password"),
-    });
+    };
+    const response = await signupAction(data);
+    if (response?.success && response?.status === 201) {
+      toastMessage.success("SuccessFull", response.message);
+      form.reset();
+      redirect("/login", "push");
+    }
+    if (!response?.success && response?.status === 409) {
+      toastMessage.error("Failed!", response?.message as string);
+      form.reset();
+      redirect("/login", "push");
+    }
   }
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
