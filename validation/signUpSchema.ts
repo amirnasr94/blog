@@ -6,6 +6,11 @@ export const signUpSchema = object({
     .max(50, { message: "Name must be less than 50 characters" }),
   email: email({ message: "Invalid email address" }),
   password: string()
-    .min(6, { message: "Password must be at least 6 characters long" })
-    .max(30, { message: "Password must be less than 30 characters" }),
+    .min(8, { error: "Be at least 8 characters long" })
+    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
+    .regex(/[0-9]/, { error: "Contain at least one number." })
+    .regex(/[^a-zA-Z0-9]/, {
+      error: "Contain at least one special character.",
+    })
+    .trim(),
 });
