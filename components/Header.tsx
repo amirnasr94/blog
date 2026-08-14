@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className="h-16 sticky flex items-center justify-center">
       <div className="container grid grid-cols-3 items-center justify-between">
-        <Link href="/" className="text-primary text-4xl font-extrabold">
+        <Link href="/" className="text-primary text-4xl font-extrabold italic">
           BLOG
         </Link>
         <nav>
@@ -45,7 +45,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-x-2 justify-end">
           <Link
-            href="/"
+            href="/sign-up"
             className={buttonVariants({
               variant: "default",
             })}
@@ -53,7 +53,7 @@ export default function Header() {
             Sign In
           </Link>
           <Link
-            href="/"
+            href="/login"
             className={buttonVariants({
               variant: "outline",
             })}
