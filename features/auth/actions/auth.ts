@@ -1,9 +1,9 @@
 "use server";
 
+import { hashing } from "@/lib/hashing";
 import connectDB from "@/server/config/mongoConfig";
 import SignUpModel from "@/server/models/signup.model";
 import { signUpSchema } from "@/validation/signUpSchema";
-import bcrypt from "bcryptjs";
 
 type Data = {
   name: string;
@@ -34,8 +34,7 @@ export async function signupAction(data: Data) {
       };
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    const hashPassword = await hashing(password);
 
     await SignUpModel.insertOne({
       name,
@@ -58,4 +57,4 @@ export async function signupAction(data: Data) {
   }
 }
 
-export async function login() {}
+export async function loginAction() {}
