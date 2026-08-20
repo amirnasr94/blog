@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signUpSchema } from "@/validation/signUpSchema";
+import { signUpSchema } from "@/validation/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { signupAction } from "../actions/auth";

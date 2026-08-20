@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import ToastMessage from "@/lib/toastMessage";
-import { loginSchema } from "@/validation/signUpSchema";
+import { loginSchema } from "@/validation/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
