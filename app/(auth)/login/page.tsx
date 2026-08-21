@@ -21,9 +21,9 @@ export default function page() {
         <LoginForm />
         <Separator className="my-5" />
         <CardFooter className="flex items-center justify-center gap-x-1">
-          Already signed up?{" "}
-          <Link href="/login" className="text-primary text-sm">
-            Log In
+          No account?{" "}
+          <Link href="/sign-up" className="text-primary text-sm">
+            Create one
           </Link>
         </CardFooter>
       </CardContent>

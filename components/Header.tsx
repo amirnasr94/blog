@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { Suspense } from "react";
+import UserInfo from "./UserInfo";
 
 export default function Header() {
   return (
@@ -33,7 +35,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/"
+                href="/create-blog"
                 className={buttonVariants({
                   variant: "ghost",
                 })}
@@ -44,22 +46,9 @@ export default function Header() {
           </ul>
         </nav>
         <div className="flex items-center gap-x-2 justify-end">
-          <Link
-            href="/sign-up"
-            className={buttonVariants({
-              variant: "default",
-            })}
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/login"
-            className={buttonVariants({
-              variant: "outline",
-            })}
-          >
-            Log In
-          </Link>
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserInfo />
+          </Suspense>
           <ThemeToggle />
         </div>
       </div>
