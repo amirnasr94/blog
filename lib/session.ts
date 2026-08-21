@@ -48,7 +48,7 @@ export async function createSession(userEmail: string) {
 
 export async function updateSession() {
   const session = (await cookies()).get("session")?.value;
-  const payload = decript(session);
+  const payload = await decript(session);
   if (!session || !payload) {
     return null;
   }
@@ -67,4 +67,15 @@ export async function updateSession() {
 export async function deleteSession() {
   const cookie = await cookies();
   cookie.delete("session");
+}
+
+export async function verifySession() {
+  const session = (await cookies()).get("session")?.value;
+  const payload = await decript(session);
+
+  if (!payload?.userEmail) {
+    return { isAuth: false, userEmail: null };
+  }
+
+  return { isAuth: true, userEmail: payload?.userEmail };
 }
