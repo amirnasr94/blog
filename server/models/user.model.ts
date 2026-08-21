@@ -1,13 +1,13 @@
 import { Document, model, models, Schema } from "mongoose";
 
-export interface ISignup extends Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   role: string;
   password: string;
 }
 
-const SignupSchema = new Schema<ISignup>(
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -43,7 +43,6 @@ const SignupSchema = new Schema<ISignup>(
   { collection: "users", timestamps: true },
 );
 
-const SignUpModel =
-  models.SignupModel || model<ISignup>("SignupModel", SignupSchema);
+const UserModel = models.UserModel || model<IUser>("UserModel", UserSchema);
 
-export default SignUpModel;
+export default UserModel;
