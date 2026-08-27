@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { loginAction } from "../actions/auth";
 import { redirect } from "next/navigation";
+import { infer as ZodInfer } from "zod";
 
 export default function LoginForm() {
   const form = useForm({
@@ -23,14 +24,12 @@ export default function LoginForm() {
     },
   });
 
-  async function handleSubmit() {
+  async function handleSubmit(data: ZodInfer<typeof loginSchema>) {
     const toast = new ToastMessage();
-    const data = {
-      email: form.getValues("email"),
-      password: form.getValues("password"),
-    };
-
-    const response = await loginAction(data);
+    const response = await loginAction({
+      email: data.email,
+      password: data.password,
+    });
     if (response?.success && response?.status === 200) {
       form.reset();
       redirect("/");
@@ -74,7 +73,12 @@ export default function LoginForm() {
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel>Password</FieldLabel>
-              <Input type="password" placeholder="••••••" {...field} />
+              <Input
+                type="password"
+                placeholder="••••••"
+                aria-invalid={fieldState.invalid}
+                {...field}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

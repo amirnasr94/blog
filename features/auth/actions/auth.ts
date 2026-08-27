@@ -88,7 +88,7 @@ export async function loginAction(data: LoginData) {
       return {
         success: false,
         status: 403,
-        message: "Password or Email is wrong!",
+        message: "Invalid Password or Email!",
       };
     }
     await createSession(email);

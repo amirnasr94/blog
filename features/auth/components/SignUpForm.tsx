@@ -13,6 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import { signupAction } from "../actions/auth";
 import ToastMessage from "@/lib/toastMessage";
 import { redirect } from "next/navigation";
+import { infer as ZodInfer } from "zod";
 
 export default function SignUpForm() {
   const form = useForm({
@@ -24,14 +25,14 @@ export default function SignUpForm() {
     },
   });
 
-  async function handleSubmit() {
+  async function handleSubmit(data: ZodInfer<typeof signUpSchema>) {
     const toastMessage = new ToastMessage();
-    const data = {
-      name: form.getValues("name"),
-      email: form.getValues("email"),
-      password: form.getValues("password"),
-    };
-    const response = await signupAction(data);
+
+    const response = await signupAction({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
     if (response?.success && response?.status === 201) {
       toastMessage.success("SuccessFull", response.message);
       form.reset();
