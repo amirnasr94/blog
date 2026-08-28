@@ -25,7 +25,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/"
+                href="/blogs"
                 className={buttonVariants({
                   variant: "ghost",
                 })}
