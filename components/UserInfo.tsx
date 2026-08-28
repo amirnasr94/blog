@@ -6,8 +6,8 @@ import Avatar from "./Avatar";
 export default async function UserInfo() {
   const response = await getUser();
 
-  if (response?.status === 200 && response?.user) {
-    return <Avatar user={response.user} />;
+  if (response?.status === 200 && response?.data) {
+    return <Avatar user={response.data.name} />;
   }
 
   return (

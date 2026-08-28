@@ -5,7 +5,20 @@ import connectDB from "@/server/config/mongoConfig";
 import UserModel from "@/server/models/user.model";
 import { cache } from "react";
 
-export const getUser = cache(async function () {
+type Returned = Promise<
+  | {
+      status: number;
+      message: string;
+      data?: {
+        name: string;
+        email: string;
+        role: "admin" | "user";
+      } | null;
+    }
+  | undefined
+>;
+
+export const getUser = cache(async function (): Returned {
   try {
     const { userEmail } = await verifySession();
     await connectDB();
@@ -13,14 +26,18 @@ export const getUser = cache(async function () {
     if (!user) {
       return {
         status: 404,
-        user: null,
+        data: null,
         message: "User not exsist!",
       };
     }
 
     return {
       status: 200,
-      user: user.name,
+      data: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
       message: "User found successfull.",
     };
   } catch (error) {
