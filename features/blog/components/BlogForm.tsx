@@ -11,10 +11,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { blogSchema } from "@/validation/blogSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { infer as ZodInfer } from "zod";
+import createBlogAction from "../actions/createBlogAction";
+import ToastMessage from "@/lib/toastMessage";
+import { redirect } from "next/navigation";
 
 export default function BlogForm() {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm({
     resolver: zodResolver(blogSchema),
     defaultValues: {
@@ -23,7 +29,28 @@ export default function BlogForm() {
     },
   });
 
-  function handleSubmit(data: ZodInfer<typeof blogSchema>) {}
+  function handleSubmit(data: ZodInfer<typeof blogSchema>) {
+    const toast = new ToastMessage();
+    form.reset();
+    startTransition(async () => {
+      const response = await createBlogAction(data);
+      if (response?.success && response.status === 201) {
+        toast.success("Successfull", response.message);
+        return;
+      }
+      if (!response?.success && response?.status === 401) {
+        toast.success("Successfull", response.message);
+        redirect("/login");
+      }
+      if (
+        response?.success &&
+        (response.status === 404 || response.status === 400)
+      ) {
+        toast.success("Successfull", response.message);
+        return;
+      }
+    });
+  }
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -59,8 +86,8 @@ export default function BlogForm() {
             </Field>
           )}
         />
-        <Button type="submit" variant="default">
-          create post
+        <Button type="submit" variant="default" disabled={isPending}>
+          {isPending ? "creating post" : "create post"}
         </Button>
       </FieldGroup>
     </form>
