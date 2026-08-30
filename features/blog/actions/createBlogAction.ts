@@ -3,7 +3,7 @@
 import { getUser } from "@/features/auth/actions/getUser";
 import { verifySession } from "@/lib/session";
 import connectDB from "@/server/config/mongoConfig";
-import Blog from "@/server/models/blog.model";
+import Blog from "@/features/blog/model/blog.model";
 import { blogSchema } from "@/validation/blogSchema";
 
 interface DataType {

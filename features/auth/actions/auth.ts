@@ -2,7 +2,7 @@
 import { createSession, deleteSession } from "@/lib/session";
 import { comparePass, hashing } from "@/lib/utils";
 import connectDB from "@/server/config/mongoConfig";
-import UserModel from "@/server/models/user.model";
+import UserModel from "@/features/auth/model/user.model";
 import { loginSchema, signUpSchema } from "@/validation/authSchema";
 
 type SignupData = {

@@ -2,7 +2,7 @@
 
 import { verifySession } from "@/lib/session";
 import connectDB from "@/server/config/mongoConfig";
-import UserModel from "@/server/models/user.model";
+import UserModel from "@/features/auth/model/user.model";
 import { cache } from "react";
 
 type Returned = Promise<

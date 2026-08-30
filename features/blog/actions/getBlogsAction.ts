@@ -2,7 +2,7 @@
 
 import { getUser } from "@/features/auth/actions/getUser";
 import connectDB from "@/server/config/mongoConfig";
-import Blog, { IBlog } from "@/server/models/blog.model";
+import Blog, { IBlog } from "@/features/blog/model/blog.model";
 
 type Returned = Promise<
   | {
@@ -34,6 +34,7 @@ export default async function getBlogsAction(): Returned {
       "author.email": author,
     })
       .populate("author", "name email")
+      .sort({ createdAt: -1 })
       .lean();
 
     return {
