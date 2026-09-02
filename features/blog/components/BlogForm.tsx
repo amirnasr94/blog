@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { blogSchema } from "@/validation/blogSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -17,6 +16,7 @@ import { infer as ZodInfer } from "zod";
 import createBlogAction from "../actions/createBlogAction";
 import ToastMessage from "@/lib/toastMessage";
 import { redirect } from "next/navigation";
+import { blogSchema } from "../validation/blogSchema";
 
 export default function BlogForm() {
   const [isPending, startTransition] = useTransition();
@@ -26,6 +26,7 @@ export default function BlogForm() {
     defaultValues: {
       title: "",
       description: "",
+      image: undefined,
     },
   });
 
@@ -66,6 +67,28 @@ export default function BlogForm() {
                 placeholder="write title of your blog..."
                 {...field}
                 aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="image"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel>Image</FieldLabel>
+              <Input
+                type="file"
+                placeholder="add blog's image"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) {
+                    field.onChange(file);
+                  }
+                }}
+                aria-invalid={fieldState.invalid}
+                accept="image/png, image/jpg, image/jpeg"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

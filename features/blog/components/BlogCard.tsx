@@ -5,8 +5,16 @@ import { IBlog } from "../model/blog.model";
 
 export default function BlogCard({ blog }: { blog: IBlog }) {
   return (
-    <Card className="relative h-80 w-full overflow-hidden p-4 hover:scale-105 transition-transform duration-300">
-      {/* <Image src={blog.image} alt={blog.title} fill objectFit="cover" /> */}
+    <Card className="w-full overflow-hidden hover:scale-105 transition-transform duration-300 p-0">
+      <div className="relative h-72">
+        <Image
+          className="rounded-t-lg"
+          src={blog.imageUrl}
+          alt={blog.title}
+          objectFit="cover"
+          fill
+        />
+      </div>
       <CardContent className="text-left">
         <Link
           href={`/blogs/${blog._id?.toString()}`}
@@ -19,7 +27,7 @@ export default function BlogCard({ blog }: { blog: IBlog }) {
           </p>
         </Link>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="my-4">
         <Link
           href={`/blogs/${blog._id?.toString()}`}
           className="text-sm text-primary hover:underline"
