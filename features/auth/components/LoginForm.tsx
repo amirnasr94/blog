@@ -8,23 +8,23 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import ToastMessage from "@/lib/toastMessage";
-import { loginSchema } from "@/validation/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { loginAction } from "../actions/auth";
 import { redirect } from "next/navigation";
 import { infer as ZodInfer } from "zod";
+import { loginSchemaValidation } from "../validation";
+import { loginAction } from "../actions";
 
 export default function LoginForm() {
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchemaValidation),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function handleSubmit(data: ZodInfer<typeof loginSchema>) {
+  async function handleSubmit(data: ZodInfer<typeof loginSchemaValidation>) {
     const toast = new ToastMessage();
     const response = await loginAction({
       email: data.email,

@@ -1,7 +1,7 @@
 "use server";
 
-import { getUser } from "@/features/auth/actions/getUser";
-import { verifySession } from "@/lib/session";
+import { getUser } from "@/features/auth/actions/getUserAction";
+import { verifySession } from "@/features/auth/lib/session";
 import connectDB from "@/server/config/mongoConfig";
 import { uploadImage } from "../logic/uploadImage";
 import { blogSchema } from "../validation/blogSchema";

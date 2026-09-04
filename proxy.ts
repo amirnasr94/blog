@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySession } from "./lib/session";
+import { verifySession } from "./features/auth/lib/session";
 
 const protectedRoutes = ["/create-blog"];
 // const publicRoutes = ["/sign-up", "/login", "/"];

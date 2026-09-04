@@ -2,7 +2,7 @@ import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Suspense } from "react";
-import UserInfo from "./UserInfo";
+import { UserInfo } from "@/features/auth";
 
 export default function Header() {
   return (

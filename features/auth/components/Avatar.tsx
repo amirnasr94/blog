@@ -1,18 +1,18 @@
 "use client";
 
 import ToastMessage from "@/lib/toastMessage";
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "./ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 import { User2, LogOutIcon } from "lucide-react";
-import { logout } from "@/features/auth/actions/auth";
 import { redirect } from "next/navigation";
+import { logout } from "../actions";
 
-export default function Avatar({ user }: { user: string }) {
+export function Avatar({ user }: { user: string }) {
   async function logOut() {
     const toast = new ToastMessage();
     const response = await logout();

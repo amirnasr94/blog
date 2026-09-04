@@ -43,6 +43,4 @@ const UserSchema = new Schema<IUser>(
   { collection: "users", timestamps: true },
 );
 
-const UserModel = models.UserModel || model<IUser>("UserModel", UserSchema);
-
-export default UserModel;
+export const User = models.User || model<IUser>("User", UserSchema);

@@ -10,7 +10,7 @@ type Payload = {
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-export async function encript(payload: Payload) {
+async function encript(payload: Payload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -18,7 +18,7 @@ export async function encript(payload: Payload) {
     .sign(encodedKey);
 }
 
-export async function decript(session: string | undefined = "") {
+async function decript(session: string | undefined = "") {
   if (!session) {
     return null;
   }

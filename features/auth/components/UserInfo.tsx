@@ -1,9 +1,9 @@
-import { getUser } from "@/features/auth/actions/getUser";
+import { getUser } from "@/features/auth/actions/getUserAction";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
-import Avatar from "./Avatar";
+import { buttonVariants } from "../../../components/ui/button";
+import { Avatar } from "@/features/auth";
 
-export default async function UserInfo() {
+export async function UserInfo() {
   const response = await getUser();
 
   if (response?.status === 200 && response?.data) {

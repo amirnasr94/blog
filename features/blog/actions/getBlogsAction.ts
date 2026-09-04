@@ -1,6 +1,6 @@
 "use server";
 
-import { getUser } from "@/features/auth/actions/getUser";
+import { getUser } from "@/features/auth/actions/getUserAction";
 import connectDB from "@/server/config/mongoConfig";
 import { Blog, IBlog } from "../model";
 

@@ -1,6 +1,6 @@
 import { object, string, email } from "zod";
 
-export const signUpSchema = object({
+export const signUpSchemaValidation = object({
   name: string()
     .min(1, { message: "Name is required" })
     .max(50, { message: "Name must be less than 50 characters" }),
@@ -13,9 +13,4 @@ export const signUpSchema = object({
       error: "Contain at least one special character.",
     })
     .trim(),
-});
-
-export const loginSchema = object({
-  email: email({ message: "Invalid email address" }),
-  password: string().trim().min(8, { error: "Be at least 8 characters long" }),
 });

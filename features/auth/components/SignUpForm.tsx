@@ -7,17 +7,17 @@ import {
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signUpSchema } from "@/validation/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { signupAction } from "../actions/auth";
 import ToastMessage from "@/lib/toastMessage";
 import { redirect } from "next/navigation";
 import { infer as ZodInfer } from "zod";
+import { signUpSchemaValidation } from "../validation";
+import { signupAction } from "../actions";
 
 export default function SignUpForm() {
   const form = useForm({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchemaValidation),
     defaultValues: {
       name: "",
       email: "",
@@ -25,7 +25,7 @@ export default function SignUpForm() {
     },
   });
 
-  async function handleSubmit(data: ZodInfer<typeof signUpSchema>) {
+  async function handleSubmit(data: ZodInfer<typeof signUpSchemaValidation>) {
     const toastMessage = new ToastMessage();
 
     const response = await signupAction({

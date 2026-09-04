@@ -1,28 +1,15 @@
 "use server";
 
-import { verifySession } from "@/lib/session";
+import { verifySession } from "@/features/auth/lib/session";
 import connectDB from "@/server/config/mongoConfig";
-import UserModel from "@/features/auth/model/user.model";
-import { cache } from "react";
+import { UserType } from "../types";
+import { User } from "../model";
 
-type Returned = Promise<
-  | {
-      status: number;
-      message: string;
-      data?: {
-        name: string;
-        email: string;
-        role: "admin" | "user";
-      } | null;
-    }
-  | undefined
->;
-
-export const getUser = cache(async function (): Returned {
+export async function getUser(): UserType {
   try {
     const { userEmail } = await verifySession();
     await connectDB();
-    const user = await UserModel.findOne({ email: userEmail });
+    const user = await User.findOne({ email: userEmail });
     if (!user) {
       return {
         status: 404,
@@ -48,4 +35,4 @@ export const getUser = cache(async function (): Returned {
       };
     }
   }
-});
+}
