@@ -1,9 +1,9 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { IBlog } from "../model/blog.model";
+import { IBlog } from "../model";
 
-export default function BlogCard({ blog }: { blog: IBlog }) {
+export function BlogCard({ blog }: { blog: IBlog }) {
   return (
     <Card className="w-full overflow-hidden hover:scale-105 transition-transform duration-300 p-0">
       <div className="relative h-72">

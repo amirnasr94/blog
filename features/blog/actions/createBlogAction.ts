@@ -3,11 +3,11 @@
 import { getUser } from "@/features/auth/actions/getUser";
 import { verifySession } from "@/lib/session";
 import connectDB from "@/server/config/mongoConfig";
-import Blog from "@/features/blog/model/blog.model";
 import { uploadImage } from "../logic/uploadImage";
 import { blogSchema } from "../validation/blogSchema";
 import { infer as zodInfer } from "zod";
 import { v2 as cloudinary } from "cloudinary";
+import { Blog } from "../model";
 
 type Returned = Promise<
   | {
@@ -18,7 +18,7 @@ type Returned = Promise<
   | undefined
 >;
 
-export default async function createBlogAction(
+export async function createBlogAction(
   data: zodInfer<typeof blogSchema>,
 ): Returned {
   const { isAuth } = await verifySession();

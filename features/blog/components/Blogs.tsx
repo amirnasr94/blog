@@ -1,18 +1,19 @@
-import getBlogsAction from "../actions/getBlogsAction";
-import { notFound } from "next/navigation";
-import BlogCard from "./BlogCard";
+import { Suspense } from "react";
+import { BlogsList } from "./BlogsList";
+import { Loading } from "./Loading";
 
-export default async function Blogs() {
-  const response = await getBlogsAction();
-
-  if (response?.status !== 200 || !response.data) {
-    return notFound();
-  }
+export function Blogs() {
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {response.data.map((blog) => (
-        <BlogCard key={blog._id?.toString()} blog={blog} />
-      ))}
-    </div>
+    <section className="text-center space-y-6">
+      <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+        Our Blog
+      </h1>
+      <p className="max-w-2xl mx-auto text-xl text-muted-foreground">
+        Insights, Thoughts, and Trends from our team
+      </p>
+      <Suspense fallback={<Loading />}>
+        <BlogsList />
+      </Suspense>
+    </section>
   );
 }

@@ -44,6 +44,4 @@ const blogSchema = new Schema<IBlog>(
   { collection: "blogs", timestamps: true },
 );
 
-const Blog = models.Blog || model("Blog", blogSchema);
-
-export default Blog;
+export const Blog = models.Blog || model("Blog", blogSchema);

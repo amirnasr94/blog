@@ -2,7 +2,7 @@
 
 import { getUser } from "@/features/auth/actions/getUser";
 import connectDB from "@/server/config/mongoConfig";
-import Blog, { IBlog } from "@/features/blog/model/blog.model";
+import { Blog, IBlog } from "../model";
 
 type Returned = Promise<
   | {
@@ -12,7 +12,7 @@ type Returned = Promise<
   | undefined
 >;
 
-export default async function getBlogsAction(): Returned {
+export async function getBlogsAction(): Returned {
   try {
     await connectDB();
     const userInfo = await getUser();

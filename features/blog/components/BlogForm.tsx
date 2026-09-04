@@ -13,12 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { infer as ZodInfer } from "zod";
-import createBlogAction from "../actions/createBlogAction";
 import ToastMessage from "@/lib/toastMessage";
 import { redirect } from "next/navigation";
-import { blogSchema } from "../validation/blogSchema";
+import { createBlogAction } from "../actions";
+import { blogSchema } from "../validation";
 
-export default function BlogForm() {
+export function BlogForm() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({

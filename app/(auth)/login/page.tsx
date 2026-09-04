@@ -15,7 +15,7 @@ export default function page() {
     <Card className="w-4/12">
       <CardHeader>
         <CardTitle>Login</CardTitle>
-        <CardDescription>Create an account to get started.</CardDescription>
+        <CardDescription>Login to get started right away.</CardDescription>
       </CardHeader>
       <CardContent>
         <LoginForm />
