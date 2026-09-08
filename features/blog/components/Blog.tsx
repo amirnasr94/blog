@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { getBlogByIdAction } from "../actions/getBlogByIdAction";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Calendar, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { getBlogByIdAction } from "../actions";
 
 type RouteParams = {
   params: Promise<{ blogId: string }>;
