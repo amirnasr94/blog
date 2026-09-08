@@ -2,8 +2,6 @@ import { v2 as cloudinary } from "cloudinary";
 
 export async function uploadImage(image: File) {
   if (!image) {
-    console.log("asjdnasjdnajs");
-
     throw new Error();
   }
 

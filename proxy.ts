@@ -6,8 +6,6 @@ const protectedRoutes = ["/create-blog"];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  console.log(req.nextUrl);
-
   const isProtectedRoute = protectedRoutes.includes(path);
   //   const isPublicRoute = publicRoutes.includes(path);
 

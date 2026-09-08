@@ -9,7 +9,7 @@ export function BlogCard({ blog }: { blog: IBlog }) {
       <div className="relative h-72">
         <Image
           className="rounded-t-lg"
-          src={blog.imageUrl}
+          src={blog.imageUrl || "/images/placeholder.png"}
           alt={blog.title}
           objectFit="cover"
           fill
