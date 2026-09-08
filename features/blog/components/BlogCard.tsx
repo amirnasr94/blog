@@ -21,13 +21,13 @@ export function BlogCard({ blog }: { blog: IBlog }) {
           className="space-y-1 cursor-pointer"
         >
           <h2 className="text-xl font-bold">{blog.title}</h2>
-          <p className="text-muted-foreground">{blog.description}</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-foreground line-clamp-3">{blog.description}</p>
+          <p className="text-sm text-muted-foreground mt-4">
             written by {blog.author.name}
           </p>
         </Link>
       </CardContent>
-      <CardFooter className="my-4">
+      <CardFooter className="pb-4">
         <Link
           href={`/blogs/${blog._id?.toString()}`}
           className="text-sm text-primary hover:underline"

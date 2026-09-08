@@ -19,7 +19,7 @@ export async function Blog({ params }: RouteParams) {
   }
 
   return (
-    <section className="animate-in fade-in duration-500 relative my-10 space-y-5">
+    <section className="max-w-3xl mx-auto animate-in fade-in duration-500 relative my-10 space-y-5">
       <Link href={"/blogs"} className={buttonVariants({ variant: "ghost" })}>
         <ArrowLeft className="size-4" />
         Back to Blog
@@ -33,21 +33,21 @@ export async function Blog({ params }: RouteParams) {
             src={response.imageUrl}
             alt={response.title}
             fill
-            objectFit="contain"
+            objectFit="cover"
           />
         </div>
         <p className="textlg text-foreground/90 leading-relaxed">
           {response.description}
         </p>
         <Separator className="my-4" />
-        <div className="space-y-2">
+        <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <Calendar className="size-4" />
             poted on: {new Date(response.createdAt).toLocaleDateString("en-US")}
           </p>
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <User className="size-4" />
-            wrote by: {response.author.name}
+            written by: {response.author.name}
           </p>
         </div>
       </div>

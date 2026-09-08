@@ -32,10 +32,10 @@ export function BlogForm() {
 
   function handleSubmit(data: ZodInfer<typeof blogSchema>) {
     const toast = new ToastMessage();
-    form.reset();
     startTransition(async () => {
       const response = await createBlogAction(data);
       if (response?.success && response.status === 201) {
+        form.reset();
         toast.success("Successfull", response.message);
         return;
       }
