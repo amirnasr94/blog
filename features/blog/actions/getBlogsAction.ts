@@ -33,7 +33,6 @@ export async function getBlogsAction(): Returned {
     const response = await Blog.find({
       "author.email": author,
     })
-      .populate("author", "name email")
       .sort({ createdAt: -1 })
       .lean();
 
