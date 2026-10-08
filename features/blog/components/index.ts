@@ -1,4 +1,4 @@
 export * from "./Blogs";
 export * from "./CreateBlog";
-export * from "./Blog";
+export * from "./BlogContent";
 export * from "./RecentlyAdded";

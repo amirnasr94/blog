@@ -8,10 +8,9 @@ export function BlogCard({ blog }: { blog: IBlog }) {
     <Card className="w-full overflow-hidden hover:scale-105 transition-transform duration-300 p-0">
       <div className="relative h-72">
         <Image
-          className="rounded-t-lg"
+          className="rounded-t-lg object-cover"
           src={blog.imageUrl || "/images/placeholder.png"}
           alt={blog.title}
-          objectFit="cover"
           fill
         />
       </div>
