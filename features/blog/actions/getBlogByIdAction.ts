@@ -2,10 +2,10 @@
 
 import connectDB from "@/server/config/mongoConfig";
 import { Blog } from "../model";
-import { type ObjectId } from "mongoose";
+import { Types } from "mongoose";
 
 interface Blog {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   title: string;
   description: string;
   imageUrl: string;

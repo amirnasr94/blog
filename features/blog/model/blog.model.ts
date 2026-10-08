@@ -14,12 +14,12 @@ const blogSchema = new Schema<IBlog>(
   {
     title: {
       type: String,
-      required: [true, ""],
+      required: [true, "Title is required"],
       trim: true,
     },
     description: {
       type: String,
-      required: [true, ""],
+      required: [true, "Description is required"],
       trim: true,
     },
     imageUrl: {
@@ -30,12 +30,12 @@ const blogSchema = new Schema<IBlog>(
     author: {
       name: {
         type: String,
-        required: [true, ""],
+        required: [true, "Author name is required"],
         trim: true,
       },
       email: {
         type: String,
-        required: [true, ""],
+        required: [true, "Author email is required"],
         trim: true,
         lowercase: true,
       },
