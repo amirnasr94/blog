@@ -17,13 +17,7 @@ export const metadata: Metadata = {
     template: "%s | Blog",
   },
   description: "",
-  icons: [
-    {
-      url: "./favicon.ico",
-      sizes: "250*250",
-    },
-  ],
-  keywords: "blog, technolgy, idea",
+  keywords: "blog, technolgy, idea, web development",
   authors: { name: "Amir Nasr Esfahani", url: "https://github.com/amirnasr94" },
 };
 
