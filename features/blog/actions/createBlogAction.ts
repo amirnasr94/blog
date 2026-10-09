@@ -8,53 +8,39 @@ import { blogSchema } from "../validation/blogSchema";
 import { infer as zodInfer } from "zod";
 import { v2 as cloudinary } from "cloudinary";
 import { Blog } from "../model";
+import { redirect } from "next/navigation";
 
-type Returned = Promise<
-  | {
-      success: boolean;
-      message: string;
-      status: number;
-    }
-  | undefined
->;
+type ActionResult = { success: true } | { success: false; error: string };
 
 export async function createBlogAction(
   data: zodInfer<typeof blogSchema>,
-): Returned {
-  const { isAuth } = await verifySession();
-  if (!isAuth) {
-    return {
-      success: false,
-      message: "User is not Login!",
-      status: 401,
-    };
+): Promise<ActionResult> {
+  const session = await verifySession();
+  if (!session.isAuth) {
+    redirect("/login");
   }
 
   const validate = blogSchema.safeParse(data);
   if (!validate.success) {
     return {
       success: false,
-      message: "Invalid Data!",
-      status: 400,
+      error: "Invalid Data!",
     };
   }
 
   try {
-    await connectDB();
-    const userInfo = await getUser();
-    if (userInfo?.status === 404) {
+    const user = await getUser();
+    if (!user) {
       return {
         success: false,
-        message: "User Not Found!",
-        status: userInfo.status,
+        error: "User Not Found!",
       };
     }
 
+    await connectDB();
     const { title, description, image } = data;
-
     const arrayBuffer = await image.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-
     const uploadImageResponse = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
@@ -72,32 +58,23 @@ export async function createBlogAction(
         )
         .end(buffer);
     });
-
     const imageUrl = uploadImageResponse as {
       secure_url: string;
     };
-
-    await Blog.insertOne({
+    await Blog.create({
       title,
       description,
       imageUrl: imageUrl.secure_url,
       author: {
-        name: userInfo?.data?.name,
-        email: userInfo?.data?.email,
+        id: user.id,
+        name: user.name,
       },
     });
     return {
       success: true,
-      message: "Blog has been Created successfully.",
-      status: 201,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        success: false,
-        message: error.message,
-        status: 500,
-      };
-    }
+    console.log("create blog error", error);
+    return { success: false, error: "create blog has been failed!" };
   }
 }

@@ -2,50 +2,55 @@
 
 import { getUser } from "@/features/auth/actions/getUserAction";
 import connectDB from "@/server/config/mongoConfig";
-import { Blog, IBlog } from "../model";
+import { Blog } from "../model";
 
-type Returned = Promise<
-  | {
-      data: IBlog[] | null;
-      status: number;
-    }
-  | undefined
->;
+type ActionResult =
+  | { success: true; data: BlogType[] }
+  | { success: false; error: string; data: [] };
 
-export async function getBlogsAction(): Returned {
+const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID;
+
+export async function getBlogsAction(): Promise<ActionResult> {
   try {
     await connectDB();
-    const userInfo = await getUser();
+    const user = await getUser();
+    let authorId;
+    if (!user) {
+      authorId = DEFAULT_USER_ID;
+    } else authorId = user.id;
 
-    let author;
-
-    if (userInfo?.status === 200) {
-      author = userInfo.data?.email;
-    } else author = process.env.NEXT_PUBLIC_AUTHOR;
-
-    if (!author) {
+    if (!authorId) {
       return {
+        success: false,
+        error: "",
         data: [],
-        status: 200,
       };
     }
 
     const response = await Blog.find({
-      "author.email": author,
+      "author.id": authorId,
     })
       .sort({ createdAt: -1 })
       .lean();
 
     return {
-      data: response,
-      status: 200,
+      success: true,
+      data: response.map((res) => ({
+        id: res._id.toString(),
+        title: res.title,
+        description: res.description,
+        imageUrl: res.imageUrl,
+        authorName: res.author.name,
+        createdAt: res.createdAt,
+      })),
     };
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        data: null,
-        status: 500,
-      };
-    }
+    console.log();
+
+    return {
+      success: false,
+      error: "",
+      data: [],
+    };
   }
 }

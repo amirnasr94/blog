@@ -2,31 +2,52 @@
 
 import connectDB from "@/server/config/mongoConfig";
 import { Blog } from "../model";
-import { Types } from "mongoose";
 
-interface Blog {
-  _id: Types.ObjectId;
-  title: string;
-  description: string;
-  imageUrl: string;
-  author: { name: string; email: string };
-  createdAt: string;
-  updatedAt: string;
-}
+type ActionResult =
+  | { success: true; data: BlogType }
+  | { success: false; error: string; data: null };
 
-export async function getBlogByIdAction(blogId: string) {
+export async function getBlogByIdAction(blogId: string): Promise<ActionResult> {
   if (!blogId) {
-    throw new Error("Blog ID is required");
+    return {
+      success: false,
+      error: "Blog ID is required",
+      data: null,
+    };
   }
+
   try {
     await connectDB();
-    const blog: Blog = await Blog.findById(blogId).lean();
+
+    const blog = await Blog.findById(blogId)
+      .select("title description imageUrl author createdAt")
+      .lean();
+
     if (!blog) {
-      throw new Error("Blog not found");
+      return {
+        success: false,
+        error: "Can not find Blog!",
+        data: null,
+      };
     }
-    return blog;
+
+    return {
+      success: true,
+      data: {
+        id: blog._id.toString(),
+        title: blog.title,
+        description: blog.description,
+        imageUrl: blog.imageUrl,
+        authorName: blog.author.name,
+        createdAt: blog.createdAt,
+      },
+    };
   } catch (error) {
     console.error("Error fetching blog by ID:", error);
-    throw new Error("Failed to fetch blog by ID");
+    return {
+      success: false,
+      error: "Error during fetch blog ny Id",
+      data: null,
+    };
   }
 }
