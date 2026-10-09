@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import LoginForm from "./LoginForm";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { LoginForm } from "./LoginForm";
 
 export function Login() {
   return (

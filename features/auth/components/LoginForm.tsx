@@ -15,7 +15,7 @@ import { infer as ZodInfer } from "zod";
 import { loginSchemaValidation } from "../validation";
 import { loginAction } from "../actions";
 
-export default function LoginForm() {
+export function LoginForm() {
   const form = useForm({
     resolver: zodResolver(loginSchemaValidation),
     defaultValues: {

@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import React from "react";
-import SignUpForm from "./SignUpForm";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { SignUpForm } from "./SignUpForm";
 
 export function SignUp() {
   return (
