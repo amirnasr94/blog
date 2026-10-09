@@ -2,21 +2,17 @@
 
 import { deleteSession } from "../lib";
 
-export async function logout() {
+type ResultAction = { success: true } | { success: false; error: string };
+
+export async function logout(): Promise<ResultAction> {
   try {
     await deleteSession();
-    return {
-      success: true,
-      status: 200,
-      message: "Logout successfull.",
-    };
+    return { success: true };
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        success: false,
-        status: 500,
-        message: error.message,
-      };
-    }
+    console.log("error during logout", error);
+    return {
+      success: false,
+      error: "",
+    };
   }
 }

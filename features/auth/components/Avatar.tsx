@@ -1,38 +1,46 @@
 "use client";
 
+import { User2, LogOutIcon } from "lucide-react";
+import { logout } from "@/features/auth/actions";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import ToastMessage from "@/lib/toastMessage";
-import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "../../../components/ui/dropdown-menu";
-import { User2, LogOutIcon } from "lucide-react";
-import { redirect } from "next/navigation";
-import { logout } from "../actions";
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
-export function Avatar({ user }: { user: string }) {
-  async function logOut() {
+export function Avatar({ userName }: { userName: string }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  function handleLogout() {
     const toast = new ToastMessage();
-    const response = await logout();
-
-    if (response?.success && response.status === 200) {
-      toast.success("Success", response.message);
-    }
-    redirect("/", "replace");
+    startTransition(async () => {
+      try {
+        const response = await logout();
+        if (response.success) {
+          router.replace("/");
+          toast.success("Success", "logout was successful.");
+        }
+      } catch {
+        toast.error("Error", "An error has been accoured, Try again!");
+      }
+    });
   }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          Hi {user} <User2 />
+          Hi {userName} <User2 />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={logOut}>
+        <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
           <LogOutIcon />
-          Sign Out
+          {isPending ? "waiting..." : "sign Out"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
