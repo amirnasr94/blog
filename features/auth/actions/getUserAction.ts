@@ -1,38 +1,29 @@
 "use server";
 
-import { verifySession } from "@/features/auth/lib/session";
+import { cache } from "react";
 import connectDB from "@/server/config/mongoConfig";
-import { UserType } from "../types";
+import { verifySession } from "@/features/auth/lib/session";
 import { User } from "../model";
 
-export async function getUser(): UserType {
-  try {
-    const { userEmail } = await verifySession();
-    await connectDB();
-    const user = await User.findOne({ email: userEmail });
-    if (!user) {
-      return {
-        status: 404,
-        data: null,
-        message: "User not exsist!",
-      };
-    }
+export type CurrentUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
 
-    return {
-      status: 200,
-      data: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      message: "User found successfull.",
-    };
-  } catch (error) {
-    if (error instanceof Error) {
-      return {
-        status: 500,
-        message: error.message,
-      };
-    }
-  }
-}
+export const getUser = cache(async (): Promise<CurrentUser | null> => {
+  const { isAuth, userId } = await verifySession();
+  if (!isAuth) return null;
+
+  await connectDB();
+  const user = await User.findById(userId).select("name email role").lean();
+  if (!user) return null;
+
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+});
