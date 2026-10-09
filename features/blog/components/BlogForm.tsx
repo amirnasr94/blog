@@ -14,7 +14,6 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { infer as ZodInfer } from "zod";
 import ToastMessage from "@/lib/toastMessage";
-import { redirect } from "next/navigation";
 import { createBlogAction } from "../actions";
 import { blogSchema } from "../validation";
 
@@ -33,22 +32,15 @@ export function BlogForm() {
   function handleSubmit(data: ZodInfer<typeof blogSchema>) {
     const toast = new ToastMessage();
     startTransition(async () => {
-      const response = await createBlogAction(data);
-      if (response?.success && response.status === 201) {
-        form.reset();
-        toast.success("Successfull", response.message);
-        return;
-      }
-      if (!response?.success && response?.status === 401) {
-        toast.success("Successfull", response.message);
-        redirect("/login");
-      }
-      if (
-        response?.success &&
-        (response.status === 404 || response.status === 400)
-      ) {
-        toast.success("Successfull", response.message);
-        return;
+      try {
+        const response = await createBlogAction(data);
+        if (!response.success) {
+          toast.error("Error", response.error);
+          return;
+        }
+        toast.success("Success", "Blog added");
+      } catch {
+        toast.error("Error", "Unfortunately occurred a problem. Try again!");
       }
     });
   }

@@ -6,8 +6,8 @@ import Link from "next/link";
 export async function RecentlyAdded() {
   const response = await getRecentlyAddedAction();
 
-  if (!Array.isArray(response?.data)) {
-    return null;
+  if (!response.data.length) {
+    return <div>Empty data!</div>;
   }
   return (
     <div className="space-y-4">
@@ -28,7 +28,7 @@ export async function RecentlyAdded() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {response.data.map((blog) => (
-            <BlogCard key={blog._id?.toString()} blog={blog} />
+            <BlogCard key={blog.id?.toString()} blog={blog} />
           ))}
         </div>
       )}
