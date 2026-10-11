@@ -12,7 +12,7 @@ import { LoginForm } from "./LoginForm";
 
 export function Login() {
   return (
-    <Card className="w-4/12">
+    <Card className="w-[calc(100%-2rem)] lg:w-4/12">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Login to get started right away.</CardDescription>

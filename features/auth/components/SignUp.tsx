@@ -12,7 +12,7 @@ import { SignUpForm } from "./SignUpForm";
 
 export function SignUp() {
   return (
-    <Card className="w-4/12">
+    <Card className="w-[calc(100%-2rem)] lg:w-4/12">
       <CardHeader>
         <CardTitle>Sign up</CardTitle>
         <CardDescription>Create an account to get started.</CardDescription>

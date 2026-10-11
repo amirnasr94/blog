@@ -37,7 +37,7 @@ export function Avatar({ userName }: { userName: string }) {
           Hi {userName} <User2 />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="z-80">
         <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
           <LogOutIcon />
           {isPending ? "waiting..." : "sign Out"}
