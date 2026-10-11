@@ -3,54 +3,55 @@
 import connectDB from "@/server/config/mongoConfig";
 import { comparePass, createSession } from "../lib";
 import { User } from "../model";
-import { LoginData } from "../types";
 import { loginSchemaValidation } from "../validation";
 
-export async function loginAction(data: LoginData) {
+type ResultAction =
+  | { success: true }
+  | {
+      success: false;
+      error: string;
+    };
+
+export async function loginAction(data: LoginData): Promise<ResultAction> {
   const validation = loginSchemaValidation.safeParse(data);
 
   if (!validation.success) {
     return {
       success: false,
-      status: 400,
-      message: "Invalid form data",
+      error: "Please enter a valid email address and password.",
     };
   }
 
   try {
     const { email, password } = data;
     await connectDB();
-    const isUserExist = await User.exists({ email });
-    if (!isUserExist) {
+
+    const user = await User.findOne({ email }).lean();
+    if (!user) {
       return {
         success: false,
-        status: 404,
-        message: "This user not find! You should first sign up.",
+        error: "Invalid email or password.",
       };
     }
 
-    const user = await User.findOne({ email });
     const isTruthPass = await comparePass(password, user.password);
     if (!isTruthPass) {
       return {
         success: false,
-        status: 403,
-        message: "Invalid Password or Email!",
+        error: "Invalid email or password.",
       };
     }
-    await createSession(email);
+    await createSession(user._id.toString());
+
     return {
       success: true,
-      status: 200,
-      message: "Login successfull.",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        success: false,
-        status: 500,
-        message: error.message,
-      };
-    }
+    console.log("Login action failed: ", error);
+
+    return {
+      success: false,
+      error: "An unexpected error occurred. Please try again later.",
+    };
   }
 }

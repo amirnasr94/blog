@@ -22,7 +22,7 @@ export async function getRecentlyAddedAction(): Promise<ActionResult> {
     if (!authorId) {
       return {
         success: false,
-        error: "",
+        error: "Unable to load blogs. Please try again later.",
         data: [],
       };
     }
@@ -46,11 +46,11 @@ export async function getRecentlyAddedAction(): Promise<ActionResult> {
       })),
     };
   } catch (error) {
-    console.log();
+    console.log("getRecentlyBlogs action failed: ", error);
 
     return {
       success: false,
-      error: "",
+      error: "Failed to load blogs. Please try again later.",
       data: [],
     };
   }

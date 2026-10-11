@@ -9,10 +9,10 @@ export async function logout(): Promise<ResultAction> {
     await deleteSession();
     return { success: true };
   } catch (error) {
-    console.log("error during logout", error);
+    console.error("Logout action failed: ", error);
     return {
       success: false,
-      error: "",
+      error: "Failed to log out. Please try again later.",
     };
   }
 }

@@ -10,12 +10,16 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import ToastMessage from "@/lib/toastMessage";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { infer as ZodInfer } from "zod";
 import { signUpSchemaValidation } from "../validation";
 import { signupAction } from "../actions";
+import { useTransition } from "react";
 
 export function SignUpForm() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(signUpSchemaValidation),
     defaultValues: {
@@ -25,24 +29,27 @@ export function SignUpForm() {
     },
   });
 
-  async function handleSubmit(data: ZodInfer<typeof signUpSchemaValidation>) {
-    const toastMessage = new ToastMessage();
+  function handleSubmit(data: ZodInfer<typeof signUpSchemaValidation>) {
+    const toast = new ToastMessage();
 
-    const response = await signupAction({
-      name: data.name,
-      email: data.email,
-      password: data.password,
+    startTransition(async () => {
+      try {
+        const response = await signupAction({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
+        if (response.success) {
+          toast.success("Success", "sign up successful.");
+          router.replace("/login");
+          return;
+        }
+
+        toast.error("Error", response.error);
+      } catch {
+        toast.error("Error", "An Error accurred, Try again!");
+      }
     });
-    if (response?.success && response?.status === 201) {
-      toastMessage.success("SuccessFull", response.message);
-      form.reset();
-      redirect("/login", "push");
-    }
-    if (!response?.success && response?.status === 409) {
-      toastMessage.error("Failed!", response?.message as string);
-      form.reset();
-      redirect("/login", "push");
-    }
   }
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -102,8 +109,8 @@ export function SignUpForm() {
           )}
         />
       </FieldGroup>
-      <Button type="submit" className="w-full mt-5">
-        Sign Up
+      <Button type="submit" className="w-full mt-5" disabled={isPending}>
+        {isPending ? "Waiting..." : "Sign Up"}
       </Button>
     </form>
   );

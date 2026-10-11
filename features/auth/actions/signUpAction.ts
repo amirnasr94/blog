@@ -2,30 +2,32 @@
 
 import connectDB from "@/server/config/mongoConfig";
 import { User } from "../model";
-import { SignupData } from "../types";
 import { signUpSchemaValidation } from "../validation";
 import { hashing } from "../lib";
 
-export async function signupAction(data: SignupData) {
+type ResultAction = { success: true } | { success: false; error: string };
+
+export async function signupAction(data: SignupData): Promise<ResultAction> {
   const validate = signUpSchemaValidation.safeParse(data);
+
   if (!validate.success) {
     return {
       success: false,
-      error: "Invalid form data",
+      error: "Please check your information and try again.",
     };
   }
+
   try {
     const { name, email, password } = data;
+
     await connectDB();
-    const isUserBeforSignedup = await User.findOne({
-      email,
-    });
+
+    const isUserBeforSignedup = await User.findOne({ email });
 
     if (isUserBeforSignedup) {
       return {
         success: false,
-        message: "You have already signed up.",
-        status: 409,
+        error: "An account with this email address already exists.",
       };
     }
 
@@ -37,17 +39,12 @@ export async function signupAction(data: SignupData) {
       password: hashPassword,
     });
 
-    return {
-      success: true,
-      message: "You signed up seccessfully! Now You can login.",
-      status: 201,
-    };
+    return { success: true };
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        status: 500,
-        error: error.message,
-      };
-    }
+    console.error("SignUp action failed:", error);
+    return {
+      success: false,
+      error: "Unable to create your account. Please try again later.",
+    };
   }
 }

@@ -26,15 +26,20 @@ export function CreateComments() {
 
   function submitComment(data: zodInfer<typeof commentSchema>) {
     const toast = new ToastMessage();
-    try {
-      startTransition(async () => {
-        await createComment(data);
-      });
-      toast.success("Success", "Comment created successfully");
+    startTransition(async () => {
+      try {
+        const result = await createComment(data);
+        if (!result.success) {
+          toast.error("Error", result.error);
+          return;
+        }
+
+        toast.success("Success", "Comment added!");
+      } catch {
+        toast.error("Error", "Something went wrong. Please try again.");
+      }
       form.reset();
-    } catch {
-      toast.error("Error", "Failed to create comment");
-    }
+    });
   }
 
   return (

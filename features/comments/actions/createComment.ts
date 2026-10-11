@@ -4,25 +4,64 @@ import connectDB from "@/server/config/mongoConfig";
 import { Comments } from "../model";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { verifySession } from "@/features/auth/lib";
+import { commentSchema } from "../validation";
+import { User } from "@/features/auth/model";
 
-export async function createComment(args: { postId: string; content: string }) {
-  if (!args.postId || typeof args.postId !== "string") {
-    throw new Error("Invalid postId");
+type ActionResult =
+  | { success: true }
+  | {
+      success: false;
+      error: string;
+    };
+
+export async function createComment(args: {
+  postId: string;
+  content: string;
+}): Promise<ActionResult> {
+  const validation = commentSchema.safeParse(args);
+  const session = await verifySession();
+
+  if (!session.isAuth) {
+    return {
+      success: false,
+      error: "Please login at first to leave a comment.",
+    };
+  }
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: "Please check your comment and try again.",
+    };
   }
 
   try {
     await connectDB();
-    const response = await Comments.insertOne({
+    const user = await User.findById(session.userId)
+      .select("name email")
+      .lean();
+
+    if (!user) {
+      return {
+        success: false,
+        error: "Your account could not be found. Please log in again.",
+      };
+    }
+    await Comments.create({
       postId: new Types.ObjectId(args.postId),
       content: args.content,
-      authorId: "userId", // Replace with actual user ID
-      authorName: "userName", // Replace with actual user name
+      authorId: user._id.toString(),
+      authorName: user.name,
     });
-    revalidatePath("/blogs");
-    console.log(response);
-
   } catch (error) {
-    console.error("Error creating comment:", error);
-    throw new Error("Failed to create comment");
+    console.error("createComment action failes: ", error);
+    return {
+      success: false,
+      error: "Unable to post your comment. Please try again later.",
+    };
   }
+
+  revalidatePath("/blogs");
+  return { success: true };
 }

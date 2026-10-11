@@ -10,12 +10,16 @@ import { Input } from "@/components/ui/input";
 import ToastMessage from "@/lib/toastMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { infer as ZodInfer } from "zod";
 import { loginSchemaValidation } from "../validation";
 import { loginAction } from "../actions";
+import { useTransition } from "react";
 
 export function LoginForm() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(loginSchemaValidation),
     defaultValues: {
@@ -24,25 +28,24 @@ export function LoginForm() {
     },
   });
 
-  async function handleSubmit(data: ZodInfer<typeof loginSchemaValidation>) {
+  function handleSubmit(data: ZodInfer<typeof loginSchemaValidation>) {
     const toast = new ToastMessage();
-    const response = await loginAction({
-      email: data.email,
-      password: data.password,
+    startTransition(async () => {
+      try {
+        const response = await loginAction({
+          email: data.email,
+          password: data.password,
+        });
+        if (response.success) {
+          toast.success("Success", "Login successful.");
+          router.replace("/");
+          return;
+        }
+        toast.error("Error", response.error);
+      } catch {
+        toast.error("Error", "An Error occurred, Try again!");
+      }
     });
-    if (response?.success && response?.status === 200) {
-      form.reset();
-      redirect("/");
-    }
-    if (
-      !response?.success &&
-      (response?.status === 404 ||
-        response?.status === 400 ||
-        response?.status === 500 ||
-        response?.status === 403)
-    ) {
-      toast.error("Failed", response.message);
-    }
   }
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -84,8 +87,8 @@ export function LoginForm() {
           )}
         />
       </FieldGroup>
-      <Button type="submit" className="w-full mt-5">
-        Login
+      <Button type="submit" className="w-full mt-5" disabled={isPending}>
+        {isPending ? "Waiting..." : "Login"}
       </Button>
     </form>
   );
