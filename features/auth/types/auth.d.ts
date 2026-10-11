@@ -1,12 +1,12 @@
-export interface SignupData {
+interface SignupData {
   name: string;
   email: string;
   password: string;
 }
 
-export type LoginData = Pick<SignupData, "email" | "password">;
+type LoginData = Pick<SignupData, "email" | "password">;
 
-export type UserType = Promise<
+type UserType = Promise<
   | {
       status: number;
       message: string;
