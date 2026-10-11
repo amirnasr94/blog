@@ -24,8 +24,8 @@ export async function generateMetadata({
   }
 
   return {
-    title: blog.title,
-    description: blog.description.slice(0, 30),
+    title: blog.data?.title,
+    description: blog.data?.description.slice(0, 30),
   };
 }
 
