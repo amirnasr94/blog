@@ -6,9 +6,14 @@ import Link from "next/link";
 export async function RecentlyAdded() {
   const response = await getRecentlyAddedAction();
 
-  if (!response.data.length) {
+  if (!response.success) {
+    return <div>Failed to load blogs.</div>;
+  }
+
+  if (response.data.length === 0) {
     return <div>Empty data!</div>;
   }
+  
   return (
     <div className="space-y-4">
       <h3 className="text-3xl text-foreground font-extrabold">Most recently</h3>

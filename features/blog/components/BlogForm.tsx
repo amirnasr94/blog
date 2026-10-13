@@ -102,7 +102,7 @@ export function BlogForm() {
           )}
         />
         <Button type="submit" variant="default" disabled={isPending}>
-          {isPending ? "creating post" : "create post"}
+          {isPending ? "creating post..." : "create post"}
         </Button>
       </FieldGroup>
     </form>

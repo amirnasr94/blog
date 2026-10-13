@@ -4,8 +4,12 @@ import { getBlogsAction } from "../actions";
 export async function BlogsList() {
   const response = await getBlogsAction();
 
+  if (!response.success) {
+    return <div>Failed to load blogs.</div>;
+  }
+
   if (!response.data.length) {
-    return <div>Empty data</div>;
+    return <div>Empty data!</div>;
   }
 
   return (

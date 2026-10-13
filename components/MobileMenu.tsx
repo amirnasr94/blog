@@ -31,8 +31,6 @@ export default function MobileMenu({ authSlot, themeSlot }: Props) {
     () => false,
   );
 
-  console.log({ mounted });
-
   // close the drawer when the route changes
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
