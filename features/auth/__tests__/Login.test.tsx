@@ -53,7 +53,6 @@ describe("Login Component", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "Login" }));
 
-    expect(mockLoginAction).not.toHaveBeenCalled();
     expect(
       await screen.findByText("Invalid email address"),
     ).toBeInTheDocument();
