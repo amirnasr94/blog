@@ -64,6 +64,7 @@ export function SignUpForm() {
                 aria-invalid={fieldState.invalid}
                 type="text"
                 placeholder="Amir Nasr..."
+                data-testid="fullName-inp"
                 {...field}
               />
               {fieldState.invalid && (
@@ -82,6 +83,7 @@ export function SignUpForm() {
                 aria-invalid={fieldState.invalid}
                 type="email"
                 placeholder="amir@gmail.com"
+                data-testid="email-inp"
                 {...field}
               />
               {fieldState.invalid && (
@@ -100,6 +102,7 @@ export function SignUpForm() {
                 aria-invalid={fieldState.invalid}
                 type="password"
                 placeholder="••••••"
+                data-testid="password-inp"
                 {...field}
               />
               {fieldState.invalid && (
